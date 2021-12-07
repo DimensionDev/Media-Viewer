@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "webpack build --mode production",
+    "start": "webpack serve --mode development"
+  },
+  "dependencies": {
+    "@google/model-viewer": "^1.9.2"
+  },
+  "devDependencies": {
+    "@types/copy-webpack-plugin": "^8.0.1",
+    "@types/eslint": "^8.2.1",
+    "@types/iframe-resizer": "^3.5.9",
+    "@types/prettier": "^2.4.2",
+    "@types/webpack-dev-server": "^4.5.0",
+    "copy-webpack-plugin": "^10.0.0",
+    "eslint": "^8.4.1",
+    "html-inline-script-webpack-plugin": "^2.0.3",
+    "html-webpack-plugin": "^5.5.0",
+    "iframe-resizer": "^4.3.2",
+    "prettier": "^2.5.1",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
+  }
+}

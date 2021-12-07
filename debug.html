@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Media Viewer (Debug Page)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.min.js"></script>
+    <style>
+      iframe {
+        width: 1px;
+        min-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <button data-url="https://storage.opensea.io/files/910d941ee89187d337ae41f2b9091fee.wav">Load WAV</button>
+      <button data-url="https://storage.opensea.io/files/8b38f04c8bbe079abb8a8a954ead6f8b.svg">Load SVG</button>
+      <button data-url="https://storage.opensea.io/files/acb109c417a5043f45204fe0c69d2f92.gltf">Load GLTF</button>
+      <button data-url="https://storage.opensea.io/files/8aec0179f512d128add87119c1e037aa.mp4">Load MP4</button>
+      <button
+        data-url="https://lh3.googleusercontent.com/GhIijLkSWRljWOjkOzMz4D-lZOSO2HIeV1VOHPFcG6S2SAXeu6gXUr9HQC20MEiPqgLNwGSFfGSjR-V1xXab-tpYQg87njxuDN2VMQ=w600"
+      >
+        Load without extname
+      </button>
+    </div>
+    <iframe id="instance" src="/"></iframe>
+    <script>
+      const frame = document.getElementById('instance')
+      iFrameResize({ autoResize: true, sizeWidth: true }, frame)
+      frame.addEventListener('message', (event) => {
+        console.log(event.data)
+      })
+      $('button[data-url]').click((event) => {
+        const $target = $(event.target)
+        frame.contentWindow.postMessage({
+          url: $target.data('url'),
+          autoPlay: false,
+        })
+      })
+    </script>
+  </body>
+</html>
