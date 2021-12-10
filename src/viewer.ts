@@ -9,8 +9,15 @@ declare global {
 export async function onView(options: ViewerOptions) {
   const type = options.type ?? (await getContentType(options.url)) ?? ''
   const { pathname } = new URL(options.url)
+  if (options.url.startsWith('ipfs://')) {
+    // https://developers.cloudflare.com/distributed-web/ipfs-gateway
+    options.url = options.url.replace(/^ipfs:\/\//, 'https://cloudflare-ipfs.com/ipfs/')
+  }
+  if (options.source === 'erc721') {
+    return onERC721(options)
+  }
   if (type.startsWith('image/') || /\.(gif|svg|png|webp)$/.test(pathname)) {
-    return renderImage(options)
+    return renderImage(options.url)
   }
   if (type.startsWith('audio/') || /\.(mp3|wav|flac|aac)$/.test(pathname)) {
     return renderAudio(options)
@@ -24,12 +31,12 @@ export async function onView(options: ViewerOptions) {
   return null
 }
 
-function renderImage(options: ViewerOptions) {
+function renderImage(url: string) {
   const element = document.createElement('img')
   element.addEventListener('error', onError)
   element.addEventListener('load', onLoad)
   element.loading = 'eager'
-  element.src = options.url
+  element.src = url
   return element
 }
 
@@ -66,8 +73,25 @@ function renderModel(options: ViewerOptions) {
   return element
 }
 
+async function onERC721(options: ViewerOptions) {
+  const response = await fetch(options.url, { method: 'GET', mode: 'no-cors' })
+  interface Payload {
+    name: string
+    description: string
+    image: string
+  }
+  const payload: Payload = await response.json()
+  return renderImage(payload.image)
+}
+
 async function getContentType(url: string) {
+  if (!/^https?:/.test(url)) {
+    return null
+  }
   const response = await fetch(url, { method: 'HEAD' })
+  if (response.status !== 200) {
+    throw new Error(response.statusText)
+  }
   return response.headers.get('content-type')
 }
 

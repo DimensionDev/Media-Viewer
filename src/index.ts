@@ -6,9 +6,10 @@ document.currentScript?.remove()
 const { searchParams } = new URL(location.href)
 
 if (searchParams.get('url')) {
-  const options = {
+  const options: ViewerOptions = {
     url: searchParams.get('url')!,
     type: searchParams.get('type'),
+    source: searchParams.get('source'),
     controls: Boolean(searchParams.get('controls') ?? true),
     autoPlay: Boolean(searchParams.get('autoplay') ?? false),
   }
@@ -23,11 +24,18 @@ let origin: string | undefined
 
 function onMessage(event: MessageEvent<ViewerOptions>) {
   origin = event.origin
-  const { url, type = null, controls = true, autoPlay = false } = event.data
-  if (!url) {
+  const { data } = event
+  if (!data.url) {
     return
   }
-  onView({ url, type, controls, autoPlay }).then(inject)
+  const options: ViewerOptions = {
+    url: data.url,
+    type: data.type ?? null,
+    source: data.source,
+    controls: Boolean(data.controls ?? true),
+    autoPlay: Boolean(data.autoPlay ?? false),
+  }
+  onView(options).then(inject)
 }
 
 function onError(event: ErrorEvent) {
