@@ -1,18 +1,27 @@
 # Media Viewer
 
-## Using
+## Usage
+
+### HTML
+
+```html
+<iframe src="https://dimensiondev.github.io/Media-Viewer/index.html?url=[media_link]" />
+```
+
+### JavaScript
 
 ```typescript
 const frame = document.createElement('iframe')
-frame.src = 'https://dimensiondev.github.io/Media-Viewer/'
+
 frame.addEventListener('load', () => {
   frame.contentWindow.postMessage({
-    url: 'a media resource link',
-    type: 'the media file mime', // optional
+    type: '[media_type]', // optional
+    url: '[media_link]',
     controls: true, // optional, allow user-control audio/video
   })
 })
-// append the `frame` object to target element
+frame.src = 'https://dimensiondev.github.io/Media-Viewer/index.html'
+document.body.appendChild(frame)
 ```
 
 ## Examples
