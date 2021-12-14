@@ -41,8 +41,8 @@
     <script>
       const frame = document.getElementById('instance')
       iFrameResize({ autoResize: true, sizeWidth: true }, frame)
-      frame.addEventListener('message', (event) => {
-        console.log(event.data)
+      window.addEventListener('message', (event) => {
+        console.log(event.origin, event.data)
       })
       $('.button-set').click('a[href]', (event) => {
         event.preventDefault()

@@ -1,3 +1,4 @@
+import { onError } from './error'
 import type { ViewerOptions } from './types'
 
 declare global {
@@ -11,9 +12,9 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
   if (!type) {
     try {
       type = (await getContentType(options.url)) ?? ''
-    } catch {
+    } catch (error) {
       if (options.url.startsWith('https://cors.r2d2.to')) {
-        return null
+        throw error
       }
       return onView({
         ...options,
@@ -86,8 +87,20 @@ function renderModel(options: ViewerOptions) {
   return element
 }
 
+function renderIframe(url: string) {
+  const element = document.createElement('iframe')
+  element.addEventListener('error', onError)
+  element.addEventListener('load', onLoad)
+  element.src = url
+  element.height = '100%'
+  element.width = '100%'
+  return element
+}
+
 function renderEmbed(url: string, type: string) {
   const element = document.createElement('embed')
+  element.addEventListener('error', onError)
+  element.addEventListener('load', onLoad)
   element.src = url
   element.type = type
   element.height = '100%'
@@ -103,8 +116,12 @@ async function onERC721(options: ViewerOptions) {
     name: string
     description: string
     image: string
+    iframe_url?: string
   }
   const payload: Payload = await response.json()
+  if (payload.iframe_url) {
+    return renderIframe(payload.iframe_url)
+  }
   return onView({
     ...options,
     source: null,
@@ -131,14 +148,6 @@ function prepareURL(url: string) {
   return url
 }
 
-function onError(this: Element, event: ErrorEvent) {
-  this.remove()
-  const element = document.createElement('p')
-  element.className = 'error-message'
-  element.textContent = event.message
-  document.body.appendChild(element)
-}
-
 function onLoad() {
-  window.parentIFrame?.resize()
+  window.parentIFrame?.size?.()
 }

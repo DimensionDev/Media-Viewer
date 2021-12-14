@@ -1,4 +1,5 @@
 import type { ViewerOptions } from './types'
+import { onError, onRejection } from './error'
 import { onView } from './viewer'
 
 document.currentScript?.remove()
@@ -17,7 +18,8 @@ if (searchParams.get('url')) {
 } else {
   window.addEventListener('message', onMessage, false)
   window.addEventListener('error', onError, false)
-  window.addEventListener('unhandledrejection', onUnhandledRejection, false)
+  window.addEventListener('unhandledrejection', onRejection, false)
+  window.addEventListener('rejectionhandled', onRejection, false)
 }
 
 let origin: string | undefined
@@ -36,18 +38,6 @@ function onMessage(event: MessageEvent<ViewerOptions>) {
     autoPlay: Boolean(data.autoPlay ?? false),
   }
   onView(options).then(inject)
-}
-
-function onError(event: ErrorEvent) {
-  if (!origin) return
-  const data = { type: 'error', reason: event.message }
-  window.postMessage(data, origin)
-}
-
-function onUnhandledRejection(event: PromiseRejectionEvent) {
-  if (!origin) return
-  const data = { type: 'unhandledrejection', reason: event.reason }
-  window.postMessage(data, origin)
 }
 
 function inject(element: Element | null) {
