@@ -6,13 +6,23 @@ declare global {
   }
 }
 
-export async function onView(options: ViewerOptions) {
-  const type = options.type ?? (await getContentType(options.url)) ?? ''
-  const { pathname } = new URL(options.url)
-  if (options.url.startsWith('ipfs://')) {
-    // https://developers.cloudflare.com/distributed-web/ipfs-gateway
-    options.url = options.url.replace(/^ipfs:\/\//, 'https://cloudflare-ipfs.com/ipfs/')
+export async function onView(options: ViewerOptions): Promise<Element | null> {
+  let type = options.type
+  if (!type) {
+    try {
+      type = (await getContentType(options.url)) ?? ''
+    } catch {
+      if (options.url.startsWith('https://cors.r2d2.to')) {
+        return null
+      }
+      return onView({
+        ...options,
+        url: `https://cors.r2d2.to/?${encodeURIComponent(options.url)}`,
+      })
+    }
   }
+  options.url = prepareURL(options.url)
+  const { pathname } = new URL(options.url)
   if (options.source === 'erc721') {
     return onERC721(options)
   }
@@ -25,8 +35,11 @@ export async function onView(options: ViewerOptions) {
   if (type.startsWith('video/') || /\.(mp4|av1|webm)$/.test(pathname)) {
     return renderVideo(options)
   }
-  if (type.startsWith('model/') || /\.(stl|gltf)/.test(pathname)) {
+  if (type.startsWith('model/') || /\.(stl|gltf)$/.test(pathname)) {
     return renderModel(options)
+  }
+  if (type === 'application/pdf' || /\.pdf$/.test(pathname)) {
+    return renderEmbed(options.url, 'application/pdf')
   }
   return null
 }
@@ -73,26 +86,49 @@ function renderModel(options: ViewerOptions) {
   return element
 }
 
+function renderEmbed(url: string, type: string) {
+  const element = document.createElement('embed')
+  element.src = url
+  element.type = type
+  element.height = '100%'
+  element.width = '100%'
+  element.setAttribute('frameborder', '0')
+  element.setAttribute('scrolling', '0')
+  return element
+}
+
 async function onERC721(options: ViewerOptions) {
-  const response = await fetch(options.url, { method: 'GET', mode: 'no-cors' })
+  const response = await fetch(options.url, { method: 'GET', mode: 'cors' })
   interface Payload {
     name: string
     description: string
     image: string
   }
   const payload: Payload = await response.json()
-  return renderImage(payload.image)
+  return onView({
+    ...options,
+    source: null,
+    url: prepareURL(payload.image),
+  })
 }
 
 async function getContentType(url: string) {
   if (!/^https?:/.test(url)) {
     return null
   }
-  const response = await fetch(url, { method: 'HEAD' })
+  const response = await fetch(url, { method: 'HEAD', mode: 'cors' })
   if (response.status !== 200) {
     throw new Error(response.statusText)
   }
   return response.headers.get('content-type')
+}
+
+function prepareURL(url: string) {
+  if (url.startsWith('ipfs://')) {
+    // https://developers.cloudflare.com/distributed-web/ipfs-gateway
+    return url.replace(/^ipfs:\/\/(ipfs\/)?/, 'https://ipfs.foundation.app/ipfs/')
+  }
+  return url
 }
 
 function onError(this: Element, event: ErrorEvent) {
