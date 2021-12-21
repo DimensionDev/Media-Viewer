@@ -36,19 +36,31 @@
         ipfs://QmcsepfMDFh2udUQWtvcnZeARNFFCPA1n2WRWUH1ysWv4W/metadata.json
       </pre>
     </div>
+    <div class="button-set" data-source="errors">
+      <p>incorrect url</p>
+      <pre hidden>
+        https://storage.opensea.io/files/8aec0179f512d128add87119c1e037.mp4
+      </pre>
+    </div>
     <hr />
     <iframe id="instance" src="index.html"></iframe>
     <script>
       const frame = document.getElementById('instance')
-      iFrameResize({ autoResize: true, sizeWidth: true }, frame)
-      window.addEventListener('message', (event) => {
-        console.log(event.origin, event.data)
-      })
+      iFrameResize(
+        {
+          autoResize: true,
+          sizeWidth: true,
+          onMessage: ({ message }) => {
+            console.log(message)
+          },
+        },
+        frame
+      )
       $('.button-set').click('a[href]', (event) => {
         event.preventDefault()
         event.stopPropagation()
         const $target = $(event.target)
-        frame.contentWindow.postMessage({
+        frame.iFrameResizer.sendMessage({
           url: $target.attr('href'),
           source: $target.data('source') ?? 'general',
         })

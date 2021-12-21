@@ -4,6 +4,7 @@ import type { ViewerOptions } from './types'
 declare global {
   interface Window {
     parentIFrame?: any
+    iFrameResizer?: any
   }
 }
 

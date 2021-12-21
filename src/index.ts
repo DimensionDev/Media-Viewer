@@ -16,17 +16,15 @@ if (searchParams.get('url')) {
   }
   onView(options).then(inject)
 } else {
-  window.addEventListener('message', onMessage, false)
+  window.iFrameResizer = {
+    onMessage,
+  }
   window.addEventListener('error', onError, false)
   window.addEventListener('unhandledrejection', onRejection, false)
   window.addEventListener('rejectionhandled', onRejection, false)
 }
 
-let origin: string | undefined
-
-function onMessage(event: MessageEvent<ViewerOptions>) {
-  origin = event.origin
-  const { data } = event
+function onMessage(data: ViewerOptions) {
   if (!data.url) {
     return
   }
