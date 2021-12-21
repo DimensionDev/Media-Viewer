@@ -4,4 +4,6 @@ export interface ViewerOptions {
   source: string | null
   controls: boolean
   autoPlay: boolean
+  playsInline: boolean
+  loop: boolean
 }

@@ -72,6 +72,8 @@ function renderVideo(options: ViewerOptions) {
   element.src = options.url
   element.controls = options.controls
   element.autoplay = options.autoPlay
+  element.playsInline = options.playsInline
+  element.loop = options.loop
   return element
 }
 

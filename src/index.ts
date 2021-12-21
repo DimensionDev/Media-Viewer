@@ -13,6 +13,8 @@ if (searchParams.get('url')) {
     source: searchParams.get('source'),
     controls: Boolean(searchParams.get('controls') ?? true),
     autoPlay: Boolean(searchParams.get('autoplay') ?? false),
+    playsInline: Boolean(searchParams.get('playsInline') ?? false),
+    loop: Boolean(searchParams.get('loop') ?? false),
   }
   onView(options).then(inject)
 } else {
@@ -34,6 +36,8 @@ function onMessage(data: ViewerOptions) {
     source: data.source,
     controls: Boolean(data.controls ?? true),
     autoPlay: Boolean(data.autoPlay ?? false),
+    playsInline: Boolean(data.playsInline ?? false),
+    loop: Boolean(data.loop ?? false),
   }
   onView(options).then(inject)
 }
