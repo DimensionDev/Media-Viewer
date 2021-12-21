@@ -67,11 +67,14 @@ function renderAudio(options: ViewerOptions) {
 
 function renderVideo(options: ViewerOptions) {
   const element = document.createElement('video')
+  const url = new URL(options.url)
+  if (url.searchParams.get('muted') !== '1' && options.autoPlay) url.searchParams.set('muted', '1')
+
   element.addEventListener('error', onError)
   element.addEventListener('loadedmetadata', onLoad)
-  element.src = options.url
   element.controls = options.controls
   element.autoplay = options.autoPlay
+  element.src = url.toString()
   element.playsInline = options.playsInline
   element.loop = options.loop
   return element
