@@ -65,6 +65,7 @@ function renderAudio(options: ViewerOptions) {
   element.src = options.url
   element.controls = options.controls
   element.autoplay = options.autoPlay
+  element.muted = options.muted
   return element
 }
 
@@ -80,6 +81,7 @@ function renderVideo(options: ViewerOptions) {
   element.src = url.toString()
   element.playsInline = options.playsInline
   element.loop = options.loop
+  element.muted = options.muted
   return element
 }
 

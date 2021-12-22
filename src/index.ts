@@ -12,9 +12,10 @@ if (searchParams.get('url')) {
     type: searchParams.get('type'),
     source: searchParams.get('source'),
     controls: Boolean(searchParams.get('controls') ?? true),
-    autoPlay: Boolean(searchParams.get('autoplay') ?? false),
+    autoPlay: Boolean(searchParams.get('autoplay') ?? true),
     playsInline: Boolean(searchParams.get('playsInline') ?? false),
-    loop: Boolean(searchParams.get('loop') ?? false),
+    loop: Boolean(searchParams.get('loop') ?? true),
+    muted: Boolean(searchParams.get('muted') ?? true)
   }
   onView(options).then(inject)
 } else {
@@ -35,9 +36,10 @@ function onMessage(data: ViewerOptions) {
     type: data.type ?? null,
     source: data.source,
     controls: Boolean(data.controls ?? true),
-    autoPlay: Boolean(data.autoPlay ?? false),
+    autoPlay: Boolean(data.autoPlay ?? true),
     playsInline: Boolean(data.playsInline ?? false),
-    loop: Boolean(data.loop ?? false),
+    loop: Boolean(data.loop ?? true),
+    muted: Boolean(data.muted ?? true)
   }
   onView(options).then(inject)
 }

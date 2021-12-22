@@ -6,4 +6,5 @@ export interface ViewerOptions {
   autoPlay: boolean
   playsInline: boolean
   loop: boolean
+  muted: boolean
 }
