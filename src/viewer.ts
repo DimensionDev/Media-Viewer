@@ -43,6 +43,9 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
   if (type === 'application/pdf' || /\.pdf$/.test(pathname)) {
     return renderEmbed(options.url, 'application/pdf')
   }
+  if (type.startsWith('text/')) {
+    return renderIframe(options.url)
+  }
   return null
 }
 
