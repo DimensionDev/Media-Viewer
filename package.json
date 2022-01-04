@@ -5,7 +5,8 @@
     "start": "webpack serve --mode development"
   },
   "dependencies": {
-    "@google/model-viewer": "^1.9.2"
+    "@google/model-viewer": "^1.9.2",
+    "ethers": "^5.5.2"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "^8.0.1",
