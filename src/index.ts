@@ -31,9 +31,6 @@ if (searchParams.get('url') || searchParams.get('erc721Token')) {
 }
 
 function onMessage(data: ViewerOptions) {
-  if (!data.url) {
-    return
-  }
   const options: ViewerOptions = {
     url: data.url,
     type: data.type ?? null,
