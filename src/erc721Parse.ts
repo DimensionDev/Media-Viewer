@@ -55,18 +55,13 @@ async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721To
     try {
       // for some NFT tokens return an URL refers to a JSON file
       const response = await fetch(tokenURI.startsWith(HTTP_PREFIX) ? `${CORS_PROXY}/?${tokenURI}` : tokenURI)
-
       if (!response?.ok) return
-
       const payload = await response.json()
-
       const mediaUrl = payload.image || payload.animation_url
-
       return ({ ...payload, mediaUrl }) as ERC721TokenInfo
     } catch (err) {
       return
     }
   }
-
   return
 }
