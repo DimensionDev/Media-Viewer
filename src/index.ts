@@ -1,13 +1,14 @@
-import type { ViewerOptions } from './types'
+import type { ViewerOptions, ViewerRawOptions, ViewerERC721TokenOptions, } from './types'
 import { onError, onRejection } from './error'
 import { onView } from './viewer'
+import { onERC721Parse } from './erc721Parse'
 
 document.currentScript?.remove()
 
 const { searchParams } = new URL(location.href)
 
-if (searchParams.get('url')) {
-  const options: ViewerOptions = {
+if (searchParams.get('url') || searchParams.get('erc721Token')) {
+  const options: ViewerRawOptions = {
     url: searchParams.get('url')!,
     type: searchParams.get('type'),
     source: searchParams.get('source'),
@@ -15,9 +16,11 @@ if (searchParams.get('url')) {
     autoPlay: Boolean(searchParams.get('autoplay') ?? true),
     playsInline: Boolean(searchParams.get('playsInline') ?? false),
     loop: Boolean(searchParams.get('loop') ?? true),
-    muted: Boolean(searchParams.get('muted') ?? true)
+    muted: Boolean(searchParams.get('muted') ?? true),
+    erc721Token: searchParams.get('erc721Token') ? JSON.parse(searchParams.get('erc721Token')!) : null
   }
-  onView(options).then(inject)
+  onParse(options)
+
 } else {
   window.iFrameResizer = {
     onMessage,
@@ -28,9 +31,6 @@ if (searchParams.get('url')) {
 }
 
 function onMessage(data: ViewerOptions) {
-  if (!data.url) {
-    return
-  }
   const options: ViewerOptions = {
     url: data.url,
     type: data.type ?? null,
@@ -39,9 +39,10 @@ function onMessage(data: ViewerOptions) {
     autoPlay: Boolean(data.autoPlay ?? true),
     playsInline: Boolean(data.playsInline ?? false),
     loop: Boolean(data.loop ?? true),
-    muted: Boolean(data.muted ?? true)
+    muted: Boolean(data.muted ?? true),
+    erc721Token: data.erc721Token,
   }
-  onView(options).then(inject)
+  onParse(options)
 }
 
 function inject(element: Element | null) {
@@ -50,4 +51,14 @@ function inject(element: Element | null) {
   }
   document.body = document.createElement('body')
   document.body.appendChild(element)
+}
+
+function onParse(options: ViewerRawOptions) {
+  if (!options.url && options.erc721Token) {
+    onERC721Parse(options as ViewerERC721TokenOptions).then(inject)
+  } else if (options.url) {
+    onView(options as ViewerOptions).then(inject)
+  } else {
+    return
+  }
 }

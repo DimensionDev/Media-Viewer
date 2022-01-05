@@ -1,5 +1,6 @@
 import { onError } from './error'
 import type { ViewerOptions } from './types'
+import { CORS_PROXY } from './constants'
 
 declare global {
   interface Window {
@@ -14,12 +15,12 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
     try {
       type = (await getContentType(options.url)) ?? ''
     } catch (error) {
-      if (options.url.startsWith('https://cors.r2d2.to')) {
+      if (options.url.startsWith(CORS_PROXY)) {
         throw error
       }
       return onView({
         ...options,
-        url: `https://cors.r2d2.to/?${encodeURIComponent(options.url)}`,
+        url: `${CORS_PROXY}/?${encodeURIComponent(options.url)}`,
       })
     }
   }
@@ -28,7 +29,7 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
   if (options.source === 'erc721') {
     return onERC721(options)
   }
-  if (type.startsWith('image/') || /\.(gif|svg|png|webp)$/.test(pathname)) {
+  if (type.startsWith('image/') || /\.(gif|svg|png|webp|jpg)$/.test(pathname)) {
     return renderImage(options.url)
   }
   if (type.startsWith('audio/') || /\.(mp3|wav|flac|aac)$/.test(pathname)) {
