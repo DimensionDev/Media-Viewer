@@ -11,16 +11,20 @@ declare global {
 
 export async function onView(options: ViewerOptions): Promise<Element | null> {
   let type = options.type
-
-  options.url = prepareURL(`${CORS_PROXY}/?${encodeURIComponent(options.url)}`)
-
   if (!type) {
     try {
       type = (await getContentType(options.url)) ?? ''
     } catch (error) {
-      throw error
+      if (options.url.startsWith(CORS_PROXY)) {
+        throw error
+      }
+      return onView({
+        ...options,
+        url: `${CORS_PROXY}/?${encodeURIComponent(options.url)}`,
+      })
     }
   }
+  options.url = prepareURL(options.url)
   const { pathname } = new URL(options.url)
   if (options.source === 'erc721') {
     return onERC721(options)
