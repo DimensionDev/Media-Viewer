@@ -26,6 +26,7 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
   }
   options.url = prepareURL(options.url)
   const { pathname } = new URL(options.url)
+  window.parentIFrame?.sendMessage({ message: { type: 'sourceType', value: type } })
   if (options.source === 'erc721') {
     return onERC721(options)
   }
