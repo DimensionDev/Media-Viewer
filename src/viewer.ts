@@ -37,7 +37,7 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
     return renderAudio(options)
   }
   if (type.startsWith('video/') || /\.(mp4|av1|webm)$/.test(pathname)) {
-    window.parentIFrame?.sendMessage({ message: { type: 'sourceType', value: 'video' } })
+    window.parentIFrame?.sendMessage({ message: { type: 'sourceType', name: 'video' } })
     return renderVideo(options)
   }
   if (type.startsWith('model/') || /\.(stl|gltf)$/.test(pathname)) {
