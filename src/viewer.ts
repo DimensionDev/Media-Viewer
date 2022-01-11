@@ -26,7 +26,7 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
   }
   options.url = prepareURL(options.url)
   const { pathname } = new URL(options.url)
-  window.parentIFrame?.sendMessage({ message: { type: 'sourceType', value: type } })
+
   if (options.source === 'erc721') {
     return onERC721(options)
   }
@@ -37,6 +37,7 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
     return renderAudio(options)
   }
   if (type.startsWith('video/') || /\.(mp4|av1|webm)$/.test(pathname)) {
+    window.parentIFrame?.sendMessage({ message: { type: 'sourceType', value: 'video' } })
     return renderVideo(options)
   }
   if (type.startsWith('model/') || /\.(stl|gltf)$/.test(pathname)) {
