@@ -1,6 +1,7 @@
 import { onError } from './error'
 import type { ViewerOptions } from './types'
 import { CORS_PROXY } from './constants'
+import fallbackImage from './nft_token_fallback.png'
 
 declare global {
   interface Window {
@@ -54,7 +55,13 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
 
 function renderImage(url: string) {
   const element = document.createElement('img')
-  element.addEventListener('error', onError)
+  element.addEventListener('error', (event) => {
+    const target = event.currentTarget as HTMLImageElement
+    target.src = fallbackImage
+    target.style.height = '64px'
+    target.style.width = '64px'
+    onError(event)
+  })
   element.addEventListener('load', onLoad)
   element.loading = 'eager'
   element.src = url
