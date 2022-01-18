@@ -96,7 +96,16 @@ function renderVideo(options: ViewerOptions) {
 
 function renderModel(options: ViewerOptions) {
   const element = document.createElement('model-viewer')
-  element.addEventListener('error', onError)
+  element.addEventListener('error', (event) => {
+    if ((event as any).detail.type === "webglcontextlost") {
+      document.body.removeChild(element)
+      window.parentIFrame?.sendMessage({
+        type: "webglContextLost"
+      })
+    } else {
+      onError(event)
+    }
+  })
   element.addEventListener('load', onLoad)
   element.setAttribute('src', options.url)
   element.setAttribute('auto-rotate', '')
