@@ -7,7 +7,6 @@
     "strict": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["index.d.ts"],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs",

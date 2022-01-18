@@ -13,12 +13,7 @@ const configurate: Configuration = {
     require.resolve('@google/model-viewer/dist/model-viewer.min.js'),
     path.resolve(context, 'src'),
   ],
-  module: {
-    rules: [{ test: /\.ts$/, loader: require.resolve('ts-loader') }, {
-      test: /\.(png|svg|jpg|jpeg|gif)$/i,
-      type: 'asset/resource',
-    },]
-  },
+  module: { rules: [{ test: /\.ts$/, loader: require.resolve('ts-loader') }] },
   plugins: [
     new HTMLPlugin({ inject: 'body', template: require.resolve('./template.ejs'), scriptLoading: 'blocking' }),
     new CopyPlugin({ patterns: [require.resolve('./debug.html')] }),

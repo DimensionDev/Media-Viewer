@@ -1,7 +1,6 @@
 import { onError } from './error'
 import type { ViewerOptions } from './types'
 import { CORS_PROXY } from './constants'
-import fallbackImage from './nft_token_fallback.png'
 
 declare global {
   interface Window {
@@ -57,7 +56,7 @@ function renderImage(url: string) {
   const element = document.createElement('img')
   element.addEventListener('error', (event) => {
     const target = event.currentTarget as HTMLImageElement
-    target.src = fallbackImage
+    target.src = 'https://user-images.githubusercontent.com/63733714/149867238-dee910d7-b4f3-4612-a693-6a0de4a08f3f.png'
     target.style.height = '64px'
     target.style.width = '64px'
     onError(event)
