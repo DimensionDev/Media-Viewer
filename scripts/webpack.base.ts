@@ -10,14 +10,13 @@ const configurate: Configuration = {
   resolve: { extensions: ['.ts', '.js', '.json'] },
   entry: [
     require.resolve('iframe-resizer/js/iframeResizer.contentWindow.min.js'),
-    require.resolve('@google/model-viewer/dist/model-viewer.min.js'),
     path.resolve(context, 'src'),
   ],
   module: { rules: [{ test: /\.ts$/, loader: require.resolve('ts-loader') }] },
   plugins: [
     new HTMLPlugin({ inject: 'body', template: require.resolve('./template.ejs'), scriptLoading: 'blocking' }),
     new CopyPlugin({ patterns: [require.resolve('./debug.html')] }),
-    new CopyPlugin({ patterns: [require.resolve('./model-viewer.min.js')] }),
+    new CopyPlugin({ patterns: [require.resolve('./model-viewer-umd.min.js')] }),
   ],
 }
 
