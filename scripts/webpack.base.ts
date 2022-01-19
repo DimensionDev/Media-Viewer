@@ -17,6 +17,7 @@ const configurate: Configuration = {
   plugins: [
     new HTMLPlugin({ inject: 'body', template: require.resolve('./template.ejs'), scriptLoading: 'blocking' }),
     new CopyPlugin({ patterns: [require.resolve('./debug.html')] }),
+    new CopyPlugin({ patterns: [require.resolve('./model-viewer.min.js')] }),
   ],
 }
 
