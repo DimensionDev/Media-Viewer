@@ -25,7 +25,7 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
     }
   }
   options.url = prepareURL(options.url)
-  const { pathname } = new URL(options.url)
+  const { pathname, searchParams } = new URL(options.url)
 
   if (options.source === 'erc721') {
     return onERC721(options)
@@ -47,7 +47,10 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
     return renderEmbed(options.url, 'application/pdf')
   }
   if (type.startsWith('text/')) {
-    return renderIframe(options.url)
+    if (!options.url.startsWith(CORS_PROXY)) return renderIframe(options.url)
+    // Get original source url
+    const sourceURL = Array.from(searchParams.keys())[0]
+    return renderIframe(sourceURL)
   }
   return null
 }
@@ -100,10 +103,10 @@ function renderModel(options: ViewerOptions) {
   scriptElement.src = 'https://dimensiondev.github.io/Media-Viewer/model-viewer-umd.min.js'
   document.head.appendChild(scriptElement)
   element.addEventListener('error', (event) => {
-    if ((event as any).detail.type === "webglcontextlost") {
+    if ((event as any).detail.type === 'webglcontextlost') {
       document.body.removeChild(element)
       window.parentIFrame?.sendMessage({
-        type: "webglContextLost"
+        type: 'webglContextLost',
       })
     } else {
       onError(event)
