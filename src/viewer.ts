@@ -129,6 +129,7 @@ function renderIframe(url: string) {
   element.src = url
   element.height = '100%'
   element.width = '100%'
+  element.setAttribute('scrolling', 'no')
   return element
 }
 
