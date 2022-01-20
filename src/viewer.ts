@@ -141,7 +141,7 @@ function renderEmbed(url: string, type: string) {
   element.height = '100%'
   element.width = '100%'
   element.setAttribute('frameborder', '0')
-  element.setAttribute('scrolling', '0')
+  element.setAttribute('scrolling', 'no')
   return element
 }
 
