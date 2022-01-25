@@ -25,7 +25,8 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
     }
   }
   options.url = prepareURL(options.url)
-  const { pathname, searchParams } = new URL(options.url)
+  const parseURL = options.url.startsWith(CORS_PROXY) ? decodeURIComponent(options.url.replace(`${CORS_PROXY}/?`, '')) : options.url
+  const { pathname, searchParams } = new URL(parseURL)
 
   if (options.source === 'erc721') {
     return onERC721(options)
@@ -100,7 +101,7 @@ function renderVideo(options: ViewerOptions) {
 function renderModel(options: ViewerOptions) {
   const element = document.createElement('model-viewer')
   const scriptElement = document.createElement('script')
-  scriptElement.src = 'https://dimensiondev.github.io/Media-Viewer/model-viewer-umd.min.js'
+  scriptElement.src = 'https://media-viewer.r2d2.to/model-viewer-umd.min.js'
   document.head.appendChild(scriptElement)
   element.addEventListener('error', (event) => {
     if ((event as any).detail.type === 'webglcontextlost') {
