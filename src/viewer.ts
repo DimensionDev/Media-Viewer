@@ -100,7 +100,7 @@ function renderVideo(options: ViewerOptions) {
 function renderModel(options: ViewerOptions) {
   const element = document.createElement('model-viewer')
   const scriptElement = document.createElement('script')
-  scriptElement.src = 'https://media-viewer.r2d2.to/model-viewer-umd.min.js'
+  scriptElement.src = 'https://dimensiondev.github.io/Media-Viewer/model-viewer-umd.min.js'
   document.head.appendChild(scriptElement)
   element.addEventListener('error', (event) => {
     if ((event as any).detail.type === 'webglcontextlost') {
