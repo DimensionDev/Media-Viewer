@@ -38,7 +38,30 @@ document.body.appendChild(frame)
 
 | Schema             | Example                                                                                     |
 | ------------------ | ------------------------------------------------------------------------------------------- |
-| ERC721 JSON Schema | <https://media-viewer.r2d2.to/index.html?url=https://www.cyberkongz.com/api/metadata-vx/15> |
+| ERC721 JSON Schema | <https://media-viewer.r2d2.to/index.html?url=https://www.cyberkongz.com/api/metadata-vx/15&source=erc721> |
+
+## Parameters
+
+| Name          | Type        | Description                                                                                                             |
+| ------------- | ----------- | -----------------------------------------------------------------------------------------------------------------------
+| `url`         | string      | Resource url, or tokenURI if `source === 'erc721'`.                                                                     |
+| `type`        | string      | Predefined content type of the resource to determine which html element to render, if it is absent *Media-Viewer* will get the content type from response header |
+| `source`      | 'erc721'    | if  `source === 'erc721'`, *Media-Viewer* will treat `url` as a tokenURI                                                  |
+| `controls`    | boolean     | html5 video option. |
+| `autoPlay`    | boolean     | html5 video option. |
+| `playsInline` | boolean     | html5 video option. |
+| `loop`        | boolean     | html5 video option. |
+| `muted`       | boolean     | html5 video option. |
+| `erc721Token` | ERC721Token | if `url` is provided, *Media-Viewer* will ignore this parameter, otherwise it will fetch the NFT resource by the `tokenId` and `address` of `erc721Token` through its `rpc`. |
+
+```typescript
+interface ERC721Token {
+    contractAddress: string
+    tokenId: string
+    rpc: string // the rpc url to send request to the relative chain.
+}
+```
+
 
 ## LICENSE
 
