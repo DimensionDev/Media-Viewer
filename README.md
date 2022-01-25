@@ -45,8 +45,8 @@ document.body.appendChild(frame)
 | Name          | Type        | Description                                                                                                             |
 | ------------- | ----------- | -----------------------------------------------------------------------------------------------------------------------
 | `url`         | string      | Resource url, or tokenURI if `source === 'erc721'`.                                                                     |
-| `type`        | string      | Predefined content type of the resource to determine which html element to render, if it is absent *Media-Viewer* will get the content type from response header |
-| `source`      | 'erc721'    | if  `source === 'erc721'`, *Media-Viewer* will treat `url` as a tokenURI                                                  |
+| `type`        | string      | Predefined content type of the resource to determine which html element to render, if it is absent *Media-Viewer* will get the content type from response header through an extra query, so recommand add one if you know what type of resource is in advance. |
+| `source`      | 'erc721'    | if  `source === 'erc721'`, *Media-Viewer* will treat `url` as a tokenURI.                                                  |
 | `controls`    | boolean     | html5 video option. |
 | `autoPlay`    | boolean     | html5 video option. |
 | `playsInline` | boolean     | html5 video option. |
