@@ -25,8 +25,8 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
     }
   }
   options.url = prepareURL(options.url)
-  const parseURL = options.url.startsWith(CORS_PROXY) ? decodeURIComponent(options.url.replace(`${CORS_PROXY}/?`, '')) : options.url
-  const { pathname, searchParams } = new URL(parseURL)
+  const parseURL = getNoProxyURL(options.url)
+  const { pathname } = new URL(parseURL)
 
   if (options.source === 'erc721') {
     return onERC721(options)
@@ -48,10 +48,7 @@ export async function onView(options: ViewerOptions): Promise<Element | null> {
     return renderEmbed(options.url, 'application/pdf')
   }
   if (type.startsWith('text/')) {
-    if (!options.url.startsWith(CORS_PROXY)) return renderIframe(options.url)
-    // Get original source url
-    const sourceURL = Array.from(searchParams.keys())[0]
-    return renderIframe(sourceURL)
+    return renderIframe(getNoProxyURL(options.url))
   }
   return null
 }
@@ -183,6 +180,10 @@ function prepareURL(url: string) {
     return url.replace(/^ipfs:\/\/(ipfs\/)?/, 'https://ipfs.foundation.app/ipfs/')
   }
   return url
+}
+
+function getNoProxyURL(url: string) {
+  return url.startsWith(CORS_PROXY) ? decodeURIComponent(url.replace(`${CORS_PROXY}/?`, '')) : url
 }
 
 function onLoad() {
