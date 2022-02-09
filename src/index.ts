@@ -31,6 +31,13 @@ if (searchParams.get('url') || searchParams.get('erc721Token')) {
 }
 
 function onMessage(data: ViewerOptions) {
+  // Set `document.body.style.height = '100%'` directly causes unable to render iframe
+  // So add this `loaded` message.
+  if (data.loaded) {
+    document.body.style.height = '100%'
+    return
+  }
+
   const options: ViewerOptions = {
     url: data.url,
     type: data.type ?? null,

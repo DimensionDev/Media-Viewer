@@ -127,10 +127,6 @@ function renderIframe(url: string) {
   element.src = url
   element.height = '100%'
   element.width = '100%'
-  // Todo: Unable to render out iframe if set height to 100vh immediately. But `setTimeout` is not a nice workaround.
-  // setTimeout(() => {
-  //   element.style.height = '100vh'
-  // }, 2000)
   return element
 }
 

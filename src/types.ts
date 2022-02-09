@@ -12,6 +12,7 @@ export interface ViewerOptions {
     tokenId: string
     rpc: string
   } | null
+  loaded?: boolean
 }
 
 export interface ViewerRawOptions extends Omit<ViewerOptions, 'url'> {
