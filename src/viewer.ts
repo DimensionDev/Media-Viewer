@@ -175,8 +175,8 @@ async function getContentType(url: string) {
 
 function prepareURL(url: string) {
   if (url.startsWith('ipfs://')) {
-    // https://developers.cloudflare.com/distributed-web/ipfs-gateway
-    return url.replace(/^ipfs:\/\/(ipfs\/)?/, 'https://ipfs.foundation.app/ipfs/')
+    // https://meson.network ipfs proxy network
+    return url.replace(/^ipfs:\/\/(ipfs\/)?/, 'https://coldcdn.com/api/cdn/mipfseoyvi/ipfs/')
   }
   return url
 }
