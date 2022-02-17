@@ -11,6 +11,7 @@ export interface ViewerOptions {
     contractAddress: string
     tokenId: string
     rpc: string
+    tokenURI?: string
   } | null
   loaded?: boolean
 }
@@ -24,5 +25,6 @@ export interface ViewerERC721TokenOptions extends Omit<ViewerRawOptions, 'erc721
     contractAddress: string
     tokenId: string
     rpc: string
+    tokenURI?: string
   }
 }

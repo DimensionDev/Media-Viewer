@@ -6,11 +6,11 @@ import { onError, onRejection } from './error'
 import { onView } from './viewer'
 
 export async function onERC721Parse(options: ViewerERC721TokenOptions) {
-  const { rpc, contractAddress, tokenId } = options.erc721Token
+  const { rpc, contractAddress, tokenId, tokenURI: predefinedTokenURI } = options.erc721Token
   const provider = new ethers.providers.JsonRpcProvider({ url: rpc })
   const contract = new Contract(contractAddress, ERC721_ABI, provider)
   try {
-    const tokenURI = await contract.tokenURI(tokenId)
+    const tokenURI = predefinedTokenURI ?? await contract.tokenURI(tokenId)
     const asset = await getERC721TokenAssetFromChain(tokenURI)
     if (!asset?.mediaUrl) throw new Error('No resource found.')
     window.parentIFrame?.sendMessage({ message: { type: 'name', name: asset.name } })
