@@ -176,7 +176,7 @@ async function getContentType(url: string) {
 function prepareURL(url: string) {
   if (url.startsWith('ipfs://')) {
     // https://meson.network ipfs proxy network
-    return url.replace(/^ipfs:\/\/(ipfs\/)?/, 'https://coldcdn.com/api/cdn/mipfseoyvi/ipfs/')
+    return url.replace(/^ipfs:\/\/(ipfs\/)?/, 'https://coldcdn.com/api/cdn/mipfsygtms/ipfs/')
   }
   return url
 }
