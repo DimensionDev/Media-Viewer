@@ -35,6 +35,9 @@ function onMessage(data: ViewerOptions) {
   // So add this `loaded` message.
   if (data.loaded) {
     document.body.style.height = '100%'
+    document.body.style.display = 'flex'
+    document.body.style.justifyContent = 'center'
+    document.body.style.alignItems = 'center'
     return
   }
 
