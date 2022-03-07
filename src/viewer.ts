@@ -81,14 +81,14 @@ function renderAudio(options: ViewerOptions) {
 
 function renderVideo(options: ViewerOptions) {
   const element = document.createElement('video')
-  const url = new URL(options.url)
+  const url = new URL(getNoProxyURL(options.url))
   if (url.searchParams.get('muted') !== '1' && options.autoPlay) url.searchParams.set('muted', '1')
 
   element.addEventListener('error', onError)
   element.addEventListener('loadedmetadata', onLoad)
   element.controls = options.controls
   element.autoplay = options.autoPlay
-  element.src = url.toString()
+  element.src = `${CORS_PROXY}/?${url.toString()}`
   element.playsInline = options.playsInline
   element.loop = options.loop
   element.muted = options.muted
