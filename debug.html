@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Media Viewer (Debug Page)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.min.js"></script>
+    <style>
+      iframe {
+        width: 1px;
+        min-width: 100%;
+      }
+      .button-set a {
+        display: block;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="button-set" data-source="general">
+      <p>General</p>
+      <pre hidden>
+        https://storage.opensea.io/files/910d941ee89187d337ae41f2b9091fee.wav
+        https://storage.opensea.io/files/8b38f04c8bbe079abb8a8a954ead6f8b.svg
+        https://storage.opensea.io/files/acb109c417a5043f45204fe0c69d2f92.gltf
+        https://ipfs.io/ipfs/Qme3CZVaVTBdpNNveq9i7gyKEPRJWE6y8hu6jsmBJeSGKK
+        https://storage.opensea.io/files/8aec0179f512d128add87119c1e037aa.mp4
+        https://lh3.googleusercontent.com/GhIijLkSWRljWOjkOzMz4D-lZOSO2HIeV1VOHPFcG6S2SAXeu6gXUr9HQC20MEiPqgLNwGSFfGSjR-V1xXab-tpYQg87njxuDN2VMQ=w600
+        https://ethouses.io/h/0xd8da6bf26964af9d7eed9e03e53415d37aa96045
+      </pre>
+    </div>
+    <div class="button-set" data-source="erc721">
+      <p>ERC721</p>
+      <pre hidden>
+        https://www.cyberkongz.com/api/metadata-vx/15
+        https://boxset.aifa.football/meta/1
+        ipfs://QmcsepfMDFh2udUQWtvcnZeARNFFCPA1n2WRWUH1ysWv4W/metadata.json
+      </pre>
+    </div>
+    <div class="button-set" data-source="errors">
+      <p>incorrect url</p>
+      <pre hidden>
+        https://storage.opensea.io/files/8aec0179f512d128add87119c1e037.mp4
+      </pre>
+    </div>
+    <hr />
+    <iframe id="instance" src="index.html"></iframe>
+    <script>
+      const frame = document.getElementById('instance')
+      iFrameResize(
+        {
+          autoResize: true,
+          sizeWidth: true,
+          onMessage: ({ message }) => {
+            console.log(message)
+          },
+        },
+        frame
+      )
+      $('.button-set').click('a[href]', (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        const $target = $(event.target)
+        frame.iFrameResizer.sendMessage({
+          url: $target.attr('href'),
+          source: $target.data('source') ?? 'general',
+        })
+      })
+      $('.button-set').each(function () {
+        const $dataset = $('pre[hidden]', this)
+        const urls = $dataset
+          .text()
+          .split('\n')
+          .map((link) => link.trim())
+        const $parent = $dataset.parent()
+        for (const url of urls) {
+          $parent.append($('<a>').text(url).attr('data-source', $parent.data('source')).attr('href', url))
+        }
+      })
+    </script>
+  </body>
+</html>

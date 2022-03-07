@@ -1,0 +1,16 @@
+/*! iFrame Resizer (iframeSizer.contentWindow.min.js) - v4.3.2 - 2021-04-26
+ *  Desc: Include this file in any page being loaded into an iframe
+ *        to force the iframe to resize to the content size.
+ *  Requires: iframeResizer.min.js on host page.
+ *  Copyright: (c) 2021 David J. Bradshaw - dave@bradshaw.net
+ *  License: MIT
+ */
+
+/**
+ * [js-sha3]{@link https://github.com/emn178/js-sha3}
+ *
+ * @version 0.8.0
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2015-2018
+ * @license MIT
+ */
